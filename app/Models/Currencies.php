@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -56,33 +57,33 @@ final class Currencies extends Model
         ];
     }
 
-    private function getAbbreviationAttribute()
+    private function getAbbreviationAttribute(): ?string
     {
         $config = config('currency');
 
         return array_key_exists($this->cur_id, $config) ? $config[$this->cur_id]['abbreviation'] : null;
     }
 
-    private function getScaleAttribute()
+    private function getScaleAttribute(): ?int
     {
         $config = config('currency');
 
         return array_key_exists($this->cur_id, $config) ? $config[$this->cur_id]['scale'] : null;
     }
 
-    private function getNameAttribute()
+    private function getNameAttribute(): ?string
     {
         $config = config('currency');
 
         return array_key_exists($this->cur_id, $config) ? $config[$this->cur_id]['name'] : null;
     }
 
-    public function getAllRecords()
+    public function getAllRecords(): Collection
     {
         return $this->orderBy('created_at', 'desc')->get();
     }
 
-    public function getRecordForDay(Carbon $day)
+    public function getRecordForDay(Carbon $day): Collection
     {
         return $this->whereDate('created_at', $day)->get();
     }

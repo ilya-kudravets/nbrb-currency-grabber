@@ -28,7 +28,7 @@ final class CollectCurrencies extends Command
      *
      * @var string
      */
-    protected $description = 'Collection currencies';
+    protected $description = 'Collect currencies';
 
     public function __construct(
         private readonly LoggerInterface $logger,
