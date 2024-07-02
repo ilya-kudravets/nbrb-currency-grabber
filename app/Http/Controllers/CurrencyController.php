@@ -11,14 +11,13 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Validator;
 use OpenApi\Attributes as OA;
 
-final class Currency extends Controller
+final class CurrencyController extends Controller
 {
     public function __construct(private readonly CurrenciesFactory $currenciesFactory) {}
 
     #[OA\Get(
         path: '/fetch-rates/',
         operationId: 'currenciesIndex',
-
         tags: ['currencies'],
         responses: [
             new OA\Response(
@@ -41,7 +40,6 @@ final class Currency extends Controller
     #[OA\Get(
         path: '/fetch-rates/{date}',
         operationId: 'currenciesIndex',
-
         tags: ['currencies'],
         responses: [
             new OA\Response(
