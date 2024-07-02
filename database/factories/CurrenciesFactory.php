@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Database\Factories;
 
 use App\Models\Currencies;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -20,9 +21,12 @@ final class CurrenciesFactory extends Factory
      */
     public function definition(): array
     {
-        $config = config('currency');
         return [
-            'cur_id' => fake()->randomKey($config),
+            'cur_id' => fake()->randomNumber(3),
+            'created_at' => Carbon::now(),
+            'Cur_Abbreviation' => fake()->currencyCode(),
+            'Cur_Scale' => fake()->randomNumber(2),
+            'Cur_Name' => fake()->text(10),
             'cur_official_rate' => fake()->randomFloat(2, 1, 100),
         ];
     }

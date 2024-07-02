@@ -25,6 +25,9 @@ it('returns one record', function () {
     Currencies::factory()->create([
         'cur_id' => 460,
         'created_at' => '2024-01-01',
+        'Cur_Abbreviation' => 'TRY',
+        'Cur_Scale' => 10,
+        'Cur_Name' => 'Турецких лир',
         'cur_official_rate' => 1.23,
     ]);
     $response = $this->getJson('/fetch-rates/2024-01-01');

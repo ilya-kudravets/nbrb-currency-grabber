@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace App\Console\Commands;
 
+use App\Models\Currencies;
 use Carbon\Carbon;
-use Database\Factories\CurrenciesFactory;
 use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Http\Client\HttpClientException;
 use Illuminate\Support\Facades\Http;
-use Psr\Log\LoggerInterface;
+use Illuminate\Support\Facades\Log;
 
 final class CollectCurrencies extends Command
 {
-    protected const API_URL = 'https://api.nbrb.by/exrates/rates?periodicity=0';
+    private const API_URL = 'https://api.nbrb.by/exrates/rates?periodicity=0';
 
     /**
      * The name and signature of the console command.
@@ -30,13 +30,6 @@ final class CollectCurrencies extends Command
      */
     protected $description = 'Collect currencies';
 
-    public function __construct(
-        private readonly LoggerInterface $logger,
-        private readonly CurrenciesFactory $currenciesFactory,
-    ) {
-        parent::__construct();
-    }
-
     /**
      * Execute the console command.
      */
@@ -48,17 +41,21 @@ final class CollectCurrencies extends Command
             if (! $response->successful()) {
                 throw new HttpClientException('Failed to fetch data from API');
             }
-
+            $values = [];
             foreach ($response->json() as $currency) {
-                $model = $this->currenciesFactory->newModel([
+                $values[] = [
                     'cur_id' => $currency['Cur_ID'],
+                    'cur_abbreviation' => $currency['Cur_Abbreviation'],
+                    'cur_scale' => $currency['Cur_Scale'],
+                    'cur_name' => $currency['Cur_Name'],
                     'cur_official_rate' => $currency['Cur_OfficialRate'],
                     'created_at' => Carbon::parse($currency['Date']),
-                ]);
-                $model->save();
+                ];
+
             }
+            Currencies::insert($values);
         } catch (Exception $e) {
-            $this->logger->error($e->getMessage());
+            Log::error($e->getMessage());
         }
     }
 }

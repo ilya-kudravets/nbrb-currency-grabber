@@ -60,12 +60,14 @@ final class Currencies extends Model
 
     protected $fillable = [
         'cur_id',
+        'cur_abbreviation',
+        'cur_scale',
+        'cur_name',
         'cur_official_rate',
+        'created_at',
     ];
 
     protected $hidden = ['id'];
-
-    protected $appends = ['abbreviation', 'scale', 'name'];
 
     /**
      * @return array{
@@ -82,34 +84,12 @@ final class Currencies extends Model
         return [
             'Cur_ID' => $this->cur_id,
             'Date' => $this->created_at,
-            'Cur_Abbreviation' => $this->getAbbreviationAttribute(),
-            'Cur_Scale' => $this->getScaleAttribute(),
-            'Cur_Name' => $this->getNameAttribute(),
+            'Cur_Abbreviation' => $this->cur_abbreviation,
+            'Cur_Scale' => $this->cur_scale,
+            'Cur_Name' => $this->cur_name,
             'Cur_OfficialRate' => $this->cur_official_rate,
         ];
     }
-
-    private function getAbbreviationAttribute(): ?string
-    {
-        $config = config('currency');
-
-        return array_key_exists($this->cur_id, $config) ? $config[$this->cur_id]['abbreviation'] : null;
-    }
-
-    private function getScaleAttribute(): ?int
-    {
-        $config = config('currency');
-
-        return array_key_exists($this->cur_id, $config) ? $config[$this->cur_id]['scale'] : null;
-    }
-
-    private function getNameAttribute(): ?string
-    {
-        $config = config('currency');
-
-        return array_key_exists($this->cur_id, $config) ? $config[$this->cur_id]['name'] : null;
-    }
-
     public function getAllRecords(): Collection
     {
         return $this->orderBy('created_at', 'desc')->get();
