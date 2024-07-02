@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use OpenApi\Attributes as OA;
 
 /**
  * @property int $id
@@ -18,6 +19,37 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $cur_name
  * @property float $cur_official_rate
  */
+#[OA\Schema(
+    schema: 'CurrenciesFormat',
+    title: 'Currencies',
+    properties: [
+        new OA\Property(
+            property: 'Cur_ID',
+            type: 'string',
+        ),
+        new OA\Property(
+            property: 'Date',
+            type: 'string',
+        ),
+        new OA\Property(
+            property: 'Cur_Abbreviation',
+            type: 'string',
+        ),
+        new OA\Property(
+            property: 'Cur_Scale',
+            type: 'int',
+        ),
+        new OA\Property(
+            property: 'Cur_Name',
+            type: 'string',
+        ),
+        new OA\Property(
+            property: 'Cur_OfficialRate',
+            type: 'int',
+        ),
+    ],
+    type: 'object',
+)]
 final class Currencies extends Model
 {
     use HasFactory;
